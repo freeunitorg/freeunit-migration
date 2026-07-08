@@ -1,7 +1,7 @@
 # njs
 
 include $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/version
-NJS_URL := https://packages.freeunit.org/njs/njs-$(NJS_VERSION).tar.gz
+NJS_URL := https://github.com/freeunitorg/njs/releases/download/$(NJS_VERSION)/njs-$(NJS_VERSION).tar.gz
 
 PKGS += njs
 
@@ -14,8 +14,10 @@ njs: njs-$(NJS_VERSION).tar.gz .sum-njs
 	$(UNPACK)
 	$(MOVE)
 
+# njs 1.0.0 recommends QuickJS, but it is an external dependency.
 .njs: njs
 	cd $< && ./configure \
+		--no-quickjs \
 		--no-libxml2 \
 		--no-zlib \
 		&& $(MAKE) libnjs
